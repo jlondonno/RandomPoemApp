@@ -22,7 +22,7 @@ public class PoemBuilder implements PoemBuilderInterface {
 	private Poem thePoem;
 
 	@Override
-	public void generatePoem() throws IOException, URISyntaxException,
+	public Poem generatePoem() throws IOException, URISyntaxException,
 			PoemException {
 		List<String> fileContent = FileReader.readFile(POEM_RULES_FILE);
 		rb = new RuleBuilder();
@@ -44,19 +44,21 @@ public class PoemBuilder implements PoemBuilderInterface {
 		for (String rule : refRules) {
 			buildLine(rule);
 		}
+		
+		return this.thePoem;
 	}
 
-	public void buildLine(String word) {
+	private void buildLine(String word) {
 
 		if (word.startsWith("<") && word.endsWith(">")) {
 			word = word.substring(1, word.length() - 1);
 		}
 
 		if (LINEBREAK.equals(word)) {
-			System.out.print("\n");
+			getThePoem().addWord("\n");
 		} else if (END.equals(word)) {
 			// adjective, a noun or a verb
-			System.out.print(" " + this.getRandomEndWord());
+			getThePoem().addWord(" " + this.getRandomEndWord());
 		} else {
 			Rule mainRule = getThePoem().getRules().get(word);
 
@@ -67,12 +69,12 @@ public class PoemBuilder implements PoemBuilderInterface {
 				buildLine(randonWord);
 				buildLine(randonKeywordRefRule);
 			} else {
-				System.out.print(" " + word);
+				getThePoem().addWord(" " + word);
 			}
 		}
 	}
 
-	public String getRandomEndWord() {
+	private String getRandomEndWord() {
 		Random rand = new Random();
 		int randomNum = rand.nextInt(END_WORDS.length);
 		String selRule = END_WORDS[randomNum];

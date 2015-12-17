@@ -17,7 +17,7 @@ public class RandomPoemApp {
 	public void createPoem(){
 		poemBuilder = new PoemBuilder();
 		try {
-			poemBuilder.generatePoem();
+			System.out.println(poemBuilder.generatePoem().getAllLines());
 		} catch (PoemException | IOException | URISyntaxException e) {
 			System.out.println(e.getMessage());
 		}
