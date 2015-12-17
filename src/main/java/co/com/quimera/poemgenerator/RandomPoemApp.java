@@ -3,7 +3,6 @@ package co.com.quimera.poemgenerator;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import co.com.quimera.poemgenerator.entity.Poem;
 import co.com.quimera.poemgenerator.exception.PoemException;
 import co.com.quimera.poemgenerator.logic.PoemBuilder;
 import co.com.quimera.poemgenerator.logic.PoemBuilderInterface;
@@ -14,30 +13,25 @@ import co.com.quimera.poemgenerator.logic.PoemBuilderInterface;
 public class RandomPoemApp {
 
 	private PoemBuilderInterface poemBuilder;
-	
-	public void createPoem() throws PoemException {
+
+	public void createPoem(){
 		poemBuilder = new PoemBuilder();
 		try {
-			Poem myPoem = poemBuilder.generatePoem();
-			System.out.println(myPoem.getBodyPoem());
-		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			poemBuilder.generatePoem();
+		} catch (PoemException | IOException | URISyntaxException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
 	public PoemBuilderInterface getPoemBuilder() {
 		return poemBuilder;
 	}
-	
+
 	public void setPoemBuilder(PoemBuilderInterface poemBuilder) {
 		this.poemBuilder = poemBuilder;
 	}
 
 	public static void main(String[] args) {
-		try {
-			new RandomPoemApp().createPoem();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		new RandomPoemApp().createPoem();
 	}
 }

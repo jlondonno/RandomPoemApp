@@ -12,21 +12,18 @@ import co.com.quimera.poemgenerator.exception.PoemException;
 import co.com.quimera.poemgenerator.util.FileReader;
 
 public class PoemBuilder implements PoemBuilderInterface {
-	
+
 	public static final String POEM_RULES_FILE = "poem-rules.txt";
 	public static final String LINEBREAK = "$LINEBREAK";
 	public static final String END = "$END";
-	public static final String[] END_WORDS = { 
-			"ADJECTIVE", 
-			"NOUN",
-			"VERB"
-			};
-	
+	public static final String[] END_WORDS = { "ADJECTIVE", "NOUN", "VERB" };
+
 	private RuleBuilderInterface rb;
 	private Poem thePoem;
-	
+
 	@Override
-	public Poem generatePoem() throws IOException, URISyntaxException, PoemException{
+	public void generatePoem() throws IOException, URISyntaxException,
+			PoemException {
 		List<String> fileContent = FileReader.readFile(POEM_RULES_FILE);
 		rb = new RuleBuilder();
 		this.thePoem = new Poem();
@@ -36,49 +33,45 @@ public class PoemBuilder implements PoemBuilderInterface {
 			this.thePoem.getRules().put(rule.getName(), rule);
 		}
 
-		// Generate the poem
 		for (Map.Entry<String, Rule> entry : this.thePoem.getRules().entrySet()) {
 			System.out.println(entry.getKey() + "/" + entry.getValue());
 		}
 		System.out.println();
-		
-		List<String> refRules = this.thePoem.getRules().get("POEM").getKeywordsRefRuleGroup();
-		
+
+		List<String> refRules = this.thePoem.getRules().get("POEM")
+				.getKeywordsRefRuleGroup();
+
 		for (String rule : refRules) {
-			findDefinition(rule);
-//			System.out.println("Built line");
-//			System.out.println(thePoem.getBodyPoem());
-//			System.out.println("=============================");
+			buildLine(rule);
 		}
-		
-		return thePoem;
 	}
-	
-	public void findDefinition(String word){
+
+	public void buildLine(String word) {
 
 		if (word.startsWith("<") && word.endsWith(">")) {
 			word = word.substring(1, word.length() - 1);
 		}
-			
+
 		if (LINEBREAK.equals(word)) {
 			System.out.print("\n");
 		} else if (END.equals(word)) {
 			// adjective, a noun or a verb
 			System.out.print(" " + this.getRandomEndWord());
-		} else{
+		} else {
 			Rule mainRule = getThePoem().getRules().get(word);
-			
-			if(mainRule != null){
+
+			if (mainRule != null) {
 				String randonWord = mainRule.getRandomWord();
-				String randonKeywordRefRule = mainRule.getRandomKeywordRefRule();
-				findDefinition(randonWord);
-				findDefinition(randonKeywordRefRule);
+				String randonKeywordRefRule = mainRule
+						.getRandomKeywordRefRule();
+				buildLine(randonWord);
+				buildLine(randonKeywordRefRule);
 			} else {
 				System.out.print(" " + word);
 			}
-		} 
+		}
 	}
-	
+
 	public String getRandomEndWord() {
 		Random rand = new Random();
 		int randomNum = rand.nextInt(END_WORDS.length);
