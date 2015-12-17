@@ -35,12 +35,8 @@ public class RandomPoemApp {
 
 	public static void main(String[] args) {
 		try {
-			for (int i = 0; i < 1; i++) {
-				new RandomPoemApp().createPoem();
-				System.out.println();
-				System.out.println("============================");
-			}
-		} catch (PoemException e) {
+			new RandomPoemApp().createPoem();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

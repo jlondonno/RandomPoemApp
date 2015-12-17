@@ -19,7 +19,7 @@ public class RuleBuilder implements RuleBuilderInterface {
 		
 		String[] fileLine = line.split(COLON);
 		String ruleName = fileLine[0].toUpperCase();
-		String ruleDefinition = fileLine[1];
+		String ruleDefinition = fileLine[1].trim();
 		
 		
 		if(!ruleDefinition.contains("|")){
